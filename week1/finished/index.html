@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Transform Transitions</title>
+<style>
+
+body {
+  margin: 0;
+}
+
+rect {
+  stroke: #fff;
+  stroke-width: .1px;
+}
+
+</style>
+<body>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script>
+
+  const width = 960; /* Constants */
+  const height = 500;
+  const z = 20;
+  const x = width / z;
+  const y = height / z;
+
+  const svg = d3.select("body").append("svg") /* creates an SVG object and stores it in this variable */
+      .attr("width", width)
+      .attr("height", height);
+
+  const translate = d => {
+    return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")"; /* We can use arrow notation for an implicit return; in this case, it's the initial position of each square */
+  }
+
+  const findColor = d => {
+    return d3.hsl(d % x / x * 360, 1, Math.floor(d / x) / y); /* Finds the color given an index*/
+  }
+
+  const mouseover = function animateRectangle(d) { /* Called when you hover over a square */
+    this.parentNode.appendChild(this); /* Don't worry too much about this; some lower-level HTML manipulation */
+
+    d3.select(this)
+        .style("pointer-events", "none")
+      .transition() /* This is what animates each square */
+        .duration(750)
+        .attr("transform", "translate(480,480)scale(23)rotate(180)")
+      .transition()
+        .delay(1500)
+        .attr("transform", "translate(240,240)scale(0)")
+        .style("fill-opacity", 0)
+        .remove();
+  }
+
+  svg.selectAll("rect")
+      .data(d3.range(x * y)) /* The range from 0 to x*y is now referencable by d */
+    .enter().append("rect") /* We create all x*y unique rectangles, each with a d from 0 to x*y. The following code runs for all rectrangles*/
+      .attr("transform", translate) /* the transform attribute gives each square its initial position */
+      .attr("width", z)
+      .attr("height", z)
+      .style("fill", findColor) /* style affects the internal CSS of the HTML element */
+      .on("mouseover", mouseover); /* on means an event listener */
+
+  </script>
+</body>
