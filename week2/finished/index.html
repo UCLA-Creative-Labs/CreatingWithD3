@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Ice Cream Flavors!</title>
+<style>
+  /* Your styles go here! */
+</style>
+<body>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script>
+    const width = 1000;
+    const height = 500;
+    const barWidth = 900;
+    const barHeight = 400;
+    const dataArr = [
+        {name: "Garlic", total: 19},
+        {name: "Fish and Chips", total: 4},
+        {name: "Goat Cheese", total: 16},
+        {name: "Sweet Corn", total: 9},
+    ];
+    // Constructing array of ice cream names
+    const names = dataArr.map( d => d.name );
+    // Constructing array ice cream totals
+    const totals = dataArr.map( d => d.total );
+    
+    // Constructing actual svg in body
+    const svg = d3.select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(50, 50)"); // adding inner "div" to house bar graph, gives room to draw both axes
+
+    // Constructing discrete scale for x axis
+    const xScale = d3.scaleBand()
+    .domain(names)
+    .range([0, barWidth])
+    .paddingInner(0.1);
+
+    // Constructing continuous scale for y axis
+    const yScale = d3.scaleLinear()
+    .domain([0, d3.max(totals)])
+    .range([barHeight, 0]);
+
+    // Drawing all of the bars in svg
+    svg.append("g")
+    .selectAll("rect") // selecting before it actually exists
+    .data(dataArr)
+    .enter()
+    .append("rect")
+    .attr("width", xScale.bandwidth())
+    .attr("height", d => barHeight - yScale(d.total)) // (0,0) is top left, (width, height) is bottom right
+    .attr("x", d => xScale(d.name)) // uses scale to determine position
+    .attr("y", d => yScale(d.total)) // uses scale to determine position
+    .style("fill", "#add8e6");
+
+    // Constructing xAxis as a d3 axis
+    const xAxis = d3.axisBottom(xScale);
+
+    // Constructing yAxis as a d3 axis
+    const yAxis = d3.axisLeft(yScale);
+
+    // Adding x axis to svg
+    svg.append("g")
+    .attr('transform', 'translate(0,' + barHeight + ')')
+    .call(xAxis);
+
+    // Adding y axis to svg
+    svg.append("g")
+    .call(yAxis);
+
+    // Adding title to bar graph
+    svg.append("g")
+    .append("text")
+    .attr("x", width/2)
+    .attr("y", -20)
+    .attr("text-anchor", "middle") 
+    .text("Preference of Ice Cream Flavor");
+
+  </script>
+</body>
