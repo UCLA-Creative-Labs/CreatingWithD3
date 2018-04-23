@@ -28,7 +28,7 @@ rect {
       .attr("height", height);
 
   const translate = d => {
-    return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")"; /* We can use arrow notation for an implicit return; in this case, it's the initial position of each square */
+    return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")"; /* We can use arrow notation; in this case, it's the initial position of each square */
   }
 
   const findColor = d => {
