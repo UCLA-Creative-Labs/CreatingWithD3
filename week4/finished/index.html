@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>My First Fetch!</title>
+
+<body>
+  <script>
+    fetch("https://api.ucla-eats.com/api/v1/menu/ActivityLevels", { method: "GET", mode: "no-cors" })
+      .then(res => res.json());
+  </script>
+</body>

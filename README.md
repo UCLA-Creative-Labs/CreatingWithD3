@@ -15,3 +15,11 @@ https://docs.google.com/presentation/d/1wUndluV6U4lXHmzlxBjhaRDVRRS25D9yeu0BgIms
 
 Further enrichment:
 - Try making a vertical bar graph!
+
+# Week Four
+Presentation link:
+https://docs.google.com/presentation/d/13UYnX9k2lXWRYPNi2m78bYQo2PwGnwK5x83fD8uJixA/edit?usp=sharing
+
+Further enrichment:
+- Try playing around with other API's! Most tech companies maintain API's for open source development, e.g. Google Maps API.
+- Learn how to POST data! This involves creating request queries in the form of JavaScript objects. Try checking out Curl and Fetch documentation.
