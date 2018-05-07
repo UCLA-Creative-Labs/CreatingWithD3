@@ -4,7 +4,11 @@
 
 <body>
   <script>
-    fetch("https://api.ucla-eats.com/api/v1/menu/ActivityLevels", { method: "GET", mode: "no-cors" })
-      .then(res => res.json());
+    fetch("http://arcane-cove-10079.herokuapp.com/api/hours/covel", { method: "GET" })
+      .then(response => response.json())
+      .then(json => {
+        console.log(json.status);
+        console.log(json.closingTime);
+      });
   </script>
 </body>
