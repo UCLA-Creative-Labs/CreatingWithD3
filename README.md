@@ -23,3 +23,11 @@ https://docs.google.com/presentation/d/13UYnX9k2lXWRYPNi2m78bYQo2PwGnwK5x83fD8uJ
 Further enrichment:
 - Try playing around with other API's! Most tech companies maintain API's for open source development, e.g. Google Maps API.
 - Learn how to POST data! This involves creating request queries in the form of JavaScript objects. Try checking out Curl and Fetch documentation.
+
+# Week Five
+Presentation link:
+https://docs.google.com/presentation/d/1L6_xSRBQGV3ItDbMMv5ggonGGfGnlGkJtAcFUHi_xR0/edit?usp=sharing
+
+Further enrichment:
+- Try playing around with other data displays (look at bl.ocks to learn how to make other graphs)
+- Hopefully, your graph is written in a way such that it is easy to change the data being shown. Play around with the cities you're using!
