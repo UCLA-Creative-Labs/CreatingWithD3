@@ -22,8 +22,9 @@
       return fetch(`https://httpbin.org/get?lat=${lat}&lon=${long}&APPID=${APPID}`, {method: "GET"})
         .then(response => response.json())
         .then(obj => {
-          const { temp } = obj.origin; // Destructuring
-          const dataPoint = Object.assign({}, { temp, city }); // Object assignment
+          // const { temp } = obj.url; // Destructuring
+          const { url } = obj;
+          const dataPoint = Object.assign({}, { url, city }); // Object assignment
           // dataArr.push(dataPoint);
           // console.log(dataPoint);
           return dataPoint;
