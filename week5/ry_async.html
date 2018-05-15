@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>A living graph!</title>
+
+<body>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script>
+    const latlong = [{ city: "San Jose", lat: 8.7832, long: 124.5085 }, { city: "Los Angeles", lat: 34.0522, long: 118.2437 }, { city: "London", lat: 51.5074, long: 0.1278 }, { city: "Shanghai", lat: 31.2304, long: 121.4737 }];
+    // Change the above array if you want to edit cities
+
+    const APPID = "3b52d627f2860aa29ebf130a40ea2823"; // API KEY
+
+    const getData = async () => {
+    	const dumArr = [];
+    	for (let i = 0; i < latlong.length; i++) {
+    		const { city, lat, long } = latlong[i]; // Object destructuring
+    		const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=${APPID}`, { // String literal templating in fetch request
+         method: "GET"
+       });
+        const json = await response.json();
+         	const { temp } = json.main; // Destructuring
+          	const dataPoint = Object.assign({}, { temp, city }); // Object assignment
+          	dumArr.push(dataPoint);
+          }
+          return dumArr;
+        }
+
+    getData().then(res => { // do work inside this .then
+    	console.log(res);
+    });
+  </script>
+</body>
