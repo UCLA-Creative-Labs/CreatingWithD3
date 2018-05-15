@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>A living graph!</title>
+    <style>
+      body, .article {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+      @media (max-width: 960px) { /* make article div fill everything if window smaller than 960px */
+        .article { 
+          width: 90vw;
+        }
+      }
+      @media (min-width: 960px) { /* make article div only 740px if window larger than 960px */
+        .article {
+          width: 960px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class = "article">
+      <p>Lorem ipsum dolor sit amet, altera mentitum neglegentur at pri, usu ubique nostro fabellas ex. Essent menandri in est. Everti nonumes ponderum ut per. Aeque reprehendunt id has, cu eum sumo ferri lobortis. Nec case ancillae ne. Eam nisl recusabo ut. Eos id denique albucius. Odio diceret duo eu. Mel ad graecis voluptua fabellas. Id vix verear invidunt antiopam. Mel fuisset dignissim vituperatoribus ne, tempor tincidunt forensibus ne nec.</p>
+      <svg class = "graph"></svg>
+      <p>Eu nam fuisset eleifend, ad vix docendi albucius salutatus. Ex summo inciderint vix. Ut vim veniam dictas vocent, ceteros accommodare an cum. Ceteros epicuri quaestio mel ad. Nam ei recteque elaboraret. Mea cu utinam noster, ut cum dolor utroque epicuri, eum eruditi pertinacia in.</p>
+    </div>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+      const latlong = [{ city: "Giza", lat: 30.017, long: 31.2135 }, { city: "Los Angeles", lat: 34.0522, long: 118.2437 }, { city: "London", lat: 51.5074, long: 0.1278 }, { city: "Toyko", lat: 35.6828, long: 139.759 }];
+      // Change the above array if you want to edit cities
+
+      const APPID = "3b52d627f2860aa29ebf130a40ea2823"; // API KEY
+
+      const getData = async () => {
+      	const dumArr = [];
+      	for (let i = 0; i < latlong.length; i++) {
+      		const { city, lat, long } = latlong[i]; // Object destructuring
+      		const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=${APPID}`, { // String literal templating in fetch request
+           method: "GET"
+         });
+          const json = await response.json();
+          console.log(json);
+          const temp = json.main.temp - 273.15; // Destructuring
+          const dataPoint = Object.assign({}, { temp, city }); // Object assignment
+            dumArr.push(dataPoint);
+          }
+          return dumArr;
+      }
+
+      const redraw = data => {
+	/* TODO: Write Me! */
+      }
+
+      getData().then(res => {
+      	console.log(res);
+        redraw(res);
+        window.addEventListener("resize", () => redraw(res));
+      });
+
+
+
+    </script>
+  </body>
+</html>
