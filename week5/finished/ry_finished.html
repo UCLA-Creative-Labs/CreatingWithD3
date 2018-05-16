@@ -34,7 +34,12 @@
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script>
-      const latlong = [{ city: "Giza", lat: 30.017, long: 31.2135 }, { city: "Los Angeles", lat: 34.0522, long: 118.2437 }, { city: "London", lat: 51.5074, long: 0.1278 }, { city: "Toyko", lat: 35.6828, long: 139.759 }];
+      const latlong = [
+        { city: "Giza", lat: 30.017, long: 31.2135 },
+        { city: "Los Angeles", lat: 34.0522, long: 118.2437 },
+        { city: "London", lat: 51.5074, long: 0.1278 },
+        { city: "Tokyo", lat: 35.6828, long: 139.759 }
+      ];
       // Change the above array if you want to edit cities
 
       const APPID = "3b52d627f2860aa29ebf130a40ea2823"; // API KEY
@@ -59,6 +64,7 @@
         const margin = {top: 50, right: 50, bottom: 50, left: 50};
         const width = document.getElementsByClassName("article")[0].clientWidth - margin.left - margin.right;
         const height = (width * 2 / 3) - margin.top - margin.bottom;
+
         d3.select(".graph").select("*").remove();
         const workingSpace = d3
         .select(".graph")
@@ -66,21 +72,27 @@
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+        /* Converting data in object to array format */
         const temps = data.map(d => d.temp);
-        const cities = data.map(d => d.city)
+        const cities = data.map(d => d.city);
+
         /* Creating color scale */
         let cScale = d3.scaleLinear()
         .domain([Math.floor(d3.min(temps)), Math.ceil(d3.max(temps))])
         .range(["#6495ed", "#fb0628"]);
+
         /* Creating x scale */
         let xScale = d3.scaleBand()
         .domain(data.map(d => d.city))
         .range([0, width])
         .paddingInner(0.1);
+
         /* Creating y scale */
         let yScale = d3.scaleLinear()
         .domain([0, Math.ceil(d3.max(temps))])
         .range([height, 0]);
+
         /* Adding rect to graph */
         workingSpace
         .append("g")
@@ -92,29 +104,34 @@
         .attr("height", d => height - yScale(d.temp))
         .attr("x", d => xScale(d.city))
         .attr("y", d => yScale(d.temp))
-        .style("fill", d => cScale(d.temp));        
+        .style("fill", d => cScale(d.temp));
+
         /* Creating and drawing xAxis */
         const xAxis = d3.axisBottom(xScale);
         workingSpace
         .append("g")
         .attr("transform", `translate(0, ${height})`)
         .call(xAxis);
+
         /* Creating and drawing yAxis */
         const yAxis = d3.axisLeft(yScale);
         workingSpace
         .append("g")
         .call(yAxis);
-
       }
 
+      let maybeSomething = [];
+
       getData().then(res => { // do work inside this .then
-      	console.log(res);
+        maybeSomething = res;
+        // What do you think this should be?
+      	console.log(maybeSomething);
         redraw(res);
         window.addEventListener("resize", () => redraw(res));
       });
 
-
-
+      // What do you think this should be?
+      console.log("look at me!", maybeSomething);
     </script>
   </body>
 </html>

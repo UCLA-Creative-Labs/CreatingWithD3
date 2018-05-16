@@ -34,7 +34,12 @@
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script>
-      const latlong = [{ city: "Giza", lat: 30.017, long: 31.2135 }, { city: "Los Angeles", lat: 34.0522, long: 118.2437 }, { city: "London", lat: 51.5074, long: 0.1278 }, { city: "Toyko", lat: 35.6828, long: 139.759 }];
+      const latlong = [
+        { city: "Giza", lat: 30.017, long: 31.2135 },
+        { city: "Los Angeles", lat: 34.0522, long: 118.2437 },
+        { city: "London", lat: 51.5074, long: 0.1278 },
+        { city: "Tokyo", lat: 35.6828, long: 139.759 }
+      ];
       // Change the above array if you want to edit cities
 
       const APPID = "3b52d627f2860aa29ebf130a40ea2823"; // API KEY
@@ -56,16 +61,22 @@
       }
 
       const redraw = data => {
-	/* TODO: Write Me! */
+        // What do you think this should output?
+        console.log("in the redraw:", data)
+        /* TODO: Write Me! */
       }
 
+      let maybeSomething = [];
+
       getData().then(res => {
-      	console.log(res);
+        maybeSomething = res;
+      	console.log(maybeSomething);
         redraw(res);
         window.addEventListener("resize", () => redraw(res));
       });
-
-
+      
+      // What do you think this should output?
+      console.log("outside the redraw:", maybeSomething);
 
     </script>
   </body>
