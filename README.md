@@ -31,3 +31,11 @@ https://docs.google.com/presentation/d/1L6_xSRBQGV3ItDbMMv5ggonGGfGnlGkJtAcFUHi_
 Further enrichment:
 - Try playing around with other data displays (look at bl.ocks to learn how to make other graphs)
 - Hopefully, your graph is written in a way such that it is easy to change the data being shown. Play around with the cities you're using!
+
+# Week Six
+Presentation link:
+https://docs.google.com/presentation/d/1P8KXWg3vbFtLeTp2L1LDs_SGcVQmGJXW2gDKtLj3zTE/edit?usp=sharing
+
+Further enrichment:
+- FINISH THE PROJECT
+- WORK ON YOUR OWN!!! DEMO DAY WOOOO!!!

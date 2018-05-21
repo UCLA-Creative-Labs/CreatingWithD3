@@ -1,29 +1,156 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>A living graph!</title>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>A living graph!</title>
+    <style>
+      /* Don't worry too much about this stuff, just know flex is love, flex is life */
+      /* Also know that this is basically just centering everything */
+      body, .article {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+      @media (max-width: 960px) { /* Make article div fill 90% of view width if window smaller than 960px */
+        .article { 
+          width: 90vw;
+        }
+      }
+      @media (min-width: 960px) { /* Make article div only 760px if window larger than 960px */
+        .article {
+          width: 960px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class = "article">
 
-<body>
-  <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script>
-    const latlong = [{ city: "San Jose", lat: 8.7832, long: 124.5085 }, { city: "Los Angeles", lat: 34.0522, long: 118.2437 }, { city: "London", lat: 51.5074, long: 0.1278 }, { city: "Shanghai", lat: 31.2304, long: 121.4737 }];
-    // Change the above array if you want to edit cities
-    const APPID = "3b52d627f2860aa29ebf130a40ea2823"; // API KEY
-    const dataArr = []; // We will use this array to store our final data
-    for (let i = 0; i < latlong.length; i++) {
-      const { city, lat, long } = latlong[i]; // Object destructuring
-      fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=${APPID}`, { // String literal templating in fetch request
-        method: "GET"
-      })
-        .then(response => response.json())
-        .then(obj => {
-          const { temp } = obj.main; // Destructuring
-          const dataPoint = Object.assign({}, { temp, city }); // Object assignment
-          dataArr.push(dataPoint);
-          console.log(dataPoint);
-        });
-    }
+      <p>Lorem ipsum dolor sit amet, altera mentitum neglegentur at pri, usu ubique nostro fabellas ex. Essent menandri in est. Everti nonumes ponderum ut per. Aeque reprehendunt id has, cu eum sumo ferri lobortis. Nec case ancillae ne. Eam nisl recusabo ut. Eos id denique albucius. Odio diceret duo eu. Mel ad graecis voluptua fabellas. Id vix verear invidunt antiopam. Mel fuisset dignissim vituperatoribus ne, tempor tincidunt forensibus ne nec.</p>
+      <!-- Notice how the svg is already created in the html before any js is called -->
+      <svg class = "graph"></svg>
 
+      <p>Eu nam fuisset eleifend, ad vix docendi albucius salutatus. Ex summo inciderint vix. Ut vim veniam dictas vocent, ceteros accommodare an cum. Ceteros epicuri quaestio mel ad. Nam ei recteque elaboraret. Mea cu utinam noster, ut cum dolor utroque epicuri, eum eruditi pertinacia in.</p>
 
+    </div>
 
-  </script>
-</body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+      // Trace through the code before looking at the console of your browser. What do you think the order of the output is going to be?
+      const latlong = [
+        { city: "Giza", lat: 30.017, long: 31.2135 },
+        { city: "Los Angeles", lat: 34.0522, long: 118.2437 },
+        { city: "London", lat: 51.5074, long: 0.1278 },
+        { city: "Tokyo", lat: 35.6828, long: 139.759 }
+      ];
+      /* Change the above array if you want to edit cities */
+
+      const APPID = "3b52d627f2860aa29ebf130a40ea2823"; /* API KEY */
+
+      // What is the function doing? (explain more than just "getting data"). What's up with this async/await stuff?
+      const getData = async () => {
+      	const dumArr = [];
+      	for (let i = 0; i < latlong.length; i++) {
+      		const { city, lat, long } = latlong[i]; /* Object destructuring */
+      		const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=${APPID}`, {
+            /* String literal templating in fetch request */
+            method: "GET"
+          });
+          const json = await response.json();
+          console.log(`json for getting ${city}:`, json);
+          const temp = json.main.temp - 273.15;
+          const dataPoint = Object.assign({}, { temp, city }); /* Object assignment */
+          dumArr.push(dataPoint);
+        }
+        return dumArr;
+      }
+
+      /* There's only 15 "chains" of js in this function, you got this :) */
+      const redraw = data => {
+        /* Creating object to store margins of svg */
+        //(remember the spacing from the pervious bar chart?)
+        const margin = {top: 50, right: 50, bottom: 50, left: 50};
+
+        /* Creating width and height based on the width of the div with class "article" */
+        const width = document.getElementsByClassName("article")[0].clientWidth - margin.left - margin.right; // Why are we subtracting the margins here?
+        const height = (width * 2 / 3) - margin.top - margin.bottom; // Why are we subtracting the margins here?
+
+        // What do you think this does? what do you think would happen if this line is removed? Try to answer the question first before try it out!
+        d3.select(".graph").select("*").remove();
+
+        /* Setting svg width height and positioning a g to correct location */
+        const workingSpace = d3
+        .select(".graph")
+        .attr("width", width + margin.left + margin.right)   // Why are we adding margins to width here and not later on (Creating x scale)?
+        .attr("height", height + margin.top + margin.bottom) // Why are we adding margins to height here and not later on (Creating y scale / Adding rects to graph)?
+        .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`); // What and where is workingSpace representing in the html file?
+
+        /* Converting data in object to array format */
+        const temps = data.map(d => d.temp);
+        const cities = data.map(d => d.city);
+
+        /* Creating color scale */
+        let cScale = d3.scaleLinear()
+        .domain([Math.floor(d3.min(temps)), Math.ceil(d3.max(temps))])
+        .range(["#6495ed", "#fb0628"]);
+
+        /* Creating x scale */
+        let xScale = d3.scaleBand()
+        .domain(data.map(d => d.city))
+        .range([0, width])
+        .paddingInner(0.1); // What happens if this line is removed?
+
+        /* Creating y scale */
+        let yScale = d3.scaleLinear()
+        .domain([0, Math.ceil(d3.max(temps))])
+        .range([height, 0]);
+
+        /* Adding rects to graph */
+        workingSpace
+        .append("g")
+        .selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("width", xScale.bandwidth())
+        .attr("height", d => height - yScale(d.temp))
+        .attr("x", d => xScale(d.city))
+        .attr("y", d => yScale(d.temp))
+        .style("fill", d => cScale(d.temp));
+
+        /* Creating and drawing xAxis */
+        const xAxis = d3.axisBottom(xScale);
+        workingSpace
+        .append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(xAxis);
+
+        /* Creating and drawing yAxis */
+        const yAxis = d3.axisLeft(yScale);
+        workingSpace
+        .append("g")
+        .call(yAxis);
+      }
+
+      let maybeSomething = [];
+      // What do you think this should be? (not a trick question)
+      console.log("maybeSomething before calling getData", maybeSomething);
+
+      getData().then(res => { /* Do work with res inside this .then */
+        maybeSomething = res;
+        // What do you think this should be?
+      	console.log("maybeSomething inside getData:", maybeSomething);
+        redraw(res);
+        window.addEventListener("resize", () => redraw(res));
+      });
+
+      // What do you think this should be? (kind of a trick question)
+      console.log("maybeSomething after calling getData:", maybeSomething);
+    </script>
+  </body>
+</html>
